@@ -1,6 +1,4 @@
-# test4
-
-fastapiv2
+A boilterplate for creating backend API using FastAPI
 
 uvicorn main:app --reload --host 0.0.0.0 --port 8080
 
@@ -105,8 +103,6 @@ Deploying inference service to AWS Lambda
 ## Add the correct type hinting when completed
 
 `aws cloudformation delete-stack --stack-name <STACK_NAME_ON_CREATION>`
-
-Made by https://github.com/arthurhenrique/cookiecutter-fastapi/graphs/contributors with ❤️
 
 Notes:
 
