@@ -1,0 +1,14 @@
+{
+    "name": "fastapi_v1",
+    "dockerComposeFile": "../docker-compose.yml",
+    "service": "fastapi",
+    "workspaceFolder": "/workspace",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.autopep8",
+                "ms-python.black-formatter"
+            ]
+        }
+    }
+}

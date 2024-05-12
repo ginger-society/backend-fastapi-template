@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  fastapi:
+    build:
+      context: .
+      args:
+        DEV: "true"
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    volumes:
+      - ./:/workspace
+      - ~/.gitconfig:/etc/gitconfig
+      - ~/.ssh:/root/.ssh
+  # db:
+  #   image: postgres:13.8-bullseye
+  #   hostname: fastapi_v1-db
+  #   environment:
+  #     POSTGRES_PASSWORD: "fastapi_v1"
+  #     POSTGRES_USER: "fastapi_v1"
+  #     POSTGRES_DB: "fastapi_v1"
+  #   volumes:
+  #     - ./fastapi_v1-db-data:/var/lib/postgresql/data
+  #   restart: always
+  #   healthcheck:
+  #     test: pg_isready -U fastapi_v1
+  #     interval: 2s
+  #     timeout: 3s
+  #     retries: 40
