@@ -1,0 +1,19 @@
+{
+  "version": "0.0.1",
+  "prompts": [
+    {
+      "type": "string",
+      "field_key": "name",
+      "prompt": "What is the name of this project",
+      "default": "FastAPI"
+    },
+    {
+      "type": "string",
+      "field_key": "root_dir",
+      "prompt": "Where do you want to save this project ( default : current directory )",
+      "default": ".",
+      "is_required": true,
+      "enable_path_exist_validator": true
+    }
+  ]
+}
