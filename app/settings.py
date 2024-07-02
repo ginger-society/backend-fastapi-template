@@ -41,9 +41,9 @@ class Settings(BaseSettings):
     API_PREFIX = "/api"
     VERSION = "0.1.0"
     DEBUG: bool = True
-    SECRET_KEY: str
+    SECRET_KEY: str = config["SECRET_KEY"]
 
-    PROJECT_NAME: str
+    PROJECT_NAME: str = config["PROJECT_NAME"]
 
     # logging configuration
     LOGGING_LEVEL = logging.DEBUG if DEBUG else logging.INFO
@@ -52,7 +52,7 @@ class Settings(BaseSettings):
     )
     logger.configure(handlers=[{"sink": sys.stderr, "level": LOGGING_LEVEL}])
 
-    FROM_DOCKER_COMPOSE: str
+    FROM_DOCKER_COMPOSE: str = config["FROM_DOCKER_COMPOSE"]
 
     host: str = "127.0.0.1"
     port: int = 8000
@@ -67,7 +67,7 @@ class Settings(BaseSettings):
     log_level: LogLevel = LogLevel.INFO
 
     # Variables for the database
-    db_host: str
+    db_host: str = config["db_host"]
     db_port: int = 5432
     db_user: str = "postgres"
     db_pass: str = "postgres"
@@ -75,7 +75,7 @@ class Settings(BaseSettings):
     db_echo: bool = True
 
     # Variables for Redis
-    redis_host: str
+    redis_host: str = config["redis_host"]
     redis_port: int = 6379
     redis_user: Optional[str] = None
     redis_pass: Optional[str] = None
@@ -90,7 +90,7 @@ class Settings(BaseSettings):
         """
         return URL.build(
             scheme="postgresql+asyncpg",
-            host=config["db_host"],
+            host=self.db_host,
             port=self.db_port,
             user=self.db_user,
             password=self.db_pass,
