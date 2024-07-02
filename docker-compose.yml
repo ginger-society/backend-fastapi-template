@@ -8,8 +8,6 @@ services:
         DEV: "true"
     ports:
       - "8080:8080"
-    env_file:
-      - .env
     command: /bin/sh -c "while sleep 1000; do :; done"
     volumes:
       - ./:/workspace

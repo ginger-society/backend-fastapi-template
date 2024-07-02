@@ -1,17 +1,19 @@
 FROM python:3.11.3
 
 ENV PYTHONUNBUFFERED 1
+ENV env dev
+WORKDIR /app
+ADD . /app
+COPY requirements.txt /app/requirements.txt
+EXPOSE 80
 
-WORKDIR /workspace
 RUN apt update
-RUN apt install zsh nano -y
+# RUN pre-commit
+RUN apt install git zsh curl nano wget -y
+RUN apt install git zsh curl nano make gcc wget build-essential procps -y
+RUN pip install --upgrade setuptools wheel
+
+RUN pip install -r requirements.txt
+
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" -y
-RUN echo "zsh" >> ~/.bashrc 
-
-COPY poetry.lock pyproject.toml ./
-RUN pip install --upgrade pip && \
-    pip install poetry && \
-    poetry config virtualenvs.create false 
-
-ARG DEV=true
-RUN poetry install
+RUN echo "zsh" >> ~/.bashrc

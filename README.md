@@ -1,34 +1,12 @@
 A boilterplate for creating backend API using FastAPI
 
+to run, while in app directory
+
 uvicorn main:app --reload --host 0.0.0.0 --port 8080
 
-## Development Requirements
+to test while in app directory
 
-- Python3.11.0
-- Pip
-- Poetry (Python Package Manager)
-
-## Installation
-
-```sh
-python -m venv venv
-source venv/bin/activate
-make install
-```
-
-## Runnning Localhost
-
-`make run`
-
-## Deploy app
-
-`make deploy`
-
-## Running Tests
-
-`make test`
-or
-`pytest`
+`python -m pytest`
 
 ## Access Swagger Documentation
 

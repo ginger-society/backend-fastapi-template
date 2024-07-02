@@ -7,7 +7,9 @@
         "vscode": {
             "extensions": [
                 "ms-python.autopep8",
-                "ms-python.black-formatter"
+                "ms-python.black-formatter",
+                "ms-python.python",
+                "tamasfe.even-better-toml"
             ]
         }
     }

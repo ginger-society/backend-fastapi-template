@@ -8,12 +8,15 @@ from yarl import URL
 
 import sys
 import logging
+from dotenv import dotenv_values
 
 from loguru import logger
 
 from core.logging import InterceptHandler
 
 TEMP_DIR = Path(gettempdir())
+
+config = dotenv_values("../.env")
 
 
 class LogLevel(str, enum.Enum):  # noqa: WPS600
@@ -68,7 +71,7 @@ class Settings(BaseSettings):
     db_port: int = 5432
     db_user: str = "postgres"
     db_pass: str = "postgres"
-    db_base: str = "django"
+    db_base: str = "Test-db"
     db_echo: bool = True
 
     # Variables for Redis
@@ -87,7 +90,7 @@ class Settings(BaseSettings):
         """
         return URL.build(
             scheme="postgresql+asyncpg",
-            host=self.db_host,
+            host=config["db_host"],
             port=self.db_port,
             user=self.db_user,
             password=self.db_pass,
@@ -106,7 +109,7 @@ class Settings(BaseSettings):
             path = f"/{self.redis_base}"
         return URL.build(
             scheme="redis",
-            host=self.redis_host,
+            host=config["redis_host"],
             port=self.redis_port,
             user=self.redis_user,
             password=self.redis_pass,
