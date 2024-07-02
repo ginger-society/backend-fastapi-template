@@ -1,10 +1,10 @@
 A boilterplate for creating backend API using FastAPI
 
-to run, while in app directory
+to run
 
 uvicorn main:app --reload --host 0.0.0.0 --port 8080
 
-to test while in app directory
+to test
 
 `python -m pytest`
 

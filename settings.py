@@ -16,7 +16,7 @@ from core.logging import InterceptHandler
 
 TEMP_DIR = Path(gettempdir())
 
-config = dotenv_values("../.env")
+config = dotenv_values(".env")
 
 
 class LogLevel(str, enum.Enum):  # noqa: WPS600

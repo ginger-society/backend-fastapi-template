@@ -1,5 +1,5 @@
 import pytest
-from app.core.paginator import pagenation
+from core.paginator import pagenation
 
 """
 In order to test behavior of pagenation function
