@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 import time
 from fastapi.responses import JSONResponse
-from api.routes.api import router as api_router
+from routes.api import router as api_router
 from settings import settings
 from lifetime import register_shutdown_event, register_startup_event
 from http import HTTPStatus
