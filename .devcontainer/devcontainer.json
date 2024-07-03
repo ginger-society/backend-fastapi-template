@@ -9,7 +9,8 @@
                 "ms-python.autopep8",
                 "ms-python.black-formatter",
                 "ms-python.python",
-                "tamasfe.even-better-toml"
+                "tamasfe.even-better-toml",
+                "ms-python.debugpy"
             ]
         }
     }

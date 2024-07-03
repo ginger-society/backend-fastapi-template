@@ -1,0 +1,8 @@
+[schema]
+url = "http://localhost:8000"
+lang = "Python"
+orm = "SQLAlchemy"
+root = "db"
+
+[tables]
+names = ["student", "enrollment", "course", "exam"]
