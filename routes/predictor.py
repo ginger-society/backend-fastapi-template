@@ -1,5 +1,6 @@
+import datetime
 from pydantic import BaseModel
-from fastapi import APIRouter, Depends, Request, status
+from fastapi import APIRouter, Depends, Request, status, HTTPException
 
 from db.dependencies import get_db_session
 from db.models import *
@@ -92,7 +93,7 @@ async def getAdminsWithJoin(
 )
 async def create_student(
     request: Request,
-    student_data: StudentInserableT,
+    student_data: StudentInsertableT,
     db: AsyncSession = Depends(get_db_session),
 ):
     new_student = Student(
@@ -124,6 +125,58 @@ async def create_student(
     )
 
 
+@router.put(
+    "/update-student/{student_id}/",
+    response_model=StudentT,
+    name="db-test:update-student",
+)
+async def update_student(
+    student_id: int,
+    student_data: StudentUpdatableT,
+    db: AsyncSession = Depends(get_db_session),
+):
+    try:
+        # Fetch the student from the database
+        student = await db.get(Student, student_id)
+
+        if not student:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Student with id {student_id} not found",
+            )
+
+        # Update the student fields with the new data
+        for field, value in student_data.dict(exclude_unset=True).items():
+            setattr(student, field, value)
+
+        # Set updated_at to current time
+        student.updated_at = datetime.datetime.utcnow()
+
+        # Commit the changes to the database
+        await db.commit()
+        await db.refresh(student)
+
+        return StudentT(
+            id=student.id,
+            name=student.name,
+            roll_number=student.roll_number,
+            on_scholarship=student.on_scholarship,
+            father_name=student.father_name,
+            address=student.address,
+            created_at=student.created_at,
+            updated_at=student.updated_at,
+            has_cab_service=student.has_cab_service,
+            courses=[],
+        )
+
+    except Exception as e:
+        print("Error:", e)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to update student",
+        )
+
+
 @router.get(
     "/cache-test/",
     response_model=str,
@@ -138,3 +191,42 @@ async def read_cache(
         await cache.set("mykey", "cached-val")
         data = await cache.get("mykey")
     return data
+
+
+@router.delete(
+    "/delete-student/{student_id}/",
+    name="db-test:delete-student",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+async def delete_student(
+    student_id: int,
+    db: AsyncSession = Depends(get_db_session),
+):
+    try:
+        # Fetch the student from the database
+        student = await db.get(Student, student_id)
+
+        if not student:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Student with id {student_id} not found",
+            )
+
+        # Delete the student record
+        await db.delete(student)
+        await db.commit()
+
+        # Return HTTP 204 No Content (successful deletion)
+        return None
+
+    except HTTPException as e:
+        # Re-raise HTTP exceptions (like 404)
+        raise e
+
+    except Exception as e:
+        # Print error message and raise HTTP 500
+        print("Error:", e)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to delete student",
+        )

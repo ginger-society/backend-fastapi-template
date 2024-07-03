@@ -20,7 +20,8 @@ from settings import settings
 from db.utils import drop_database  # create_database
 
 from db.meta import meta  # noqa: WPS433
-from db.models import load_all_models  # noqa: WPS433
+
+# from db.models import load_all_models  # noqa: WPS433
 
 
 @pytest.fixture(scope="session")
@@ -41,7 +42,7 @@ async def _engine() -> AsyncGenerator[AsyncEngine, None]:
     :yield: new engine.
     """
 
-    load_all_models()
+    # load_all_models()
 
     # await create_database()
 

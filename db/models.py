@@ -1,17 +1,7 @@
 from __future__ import annotations
 
 from db.meta import Model
-from sqlalchemy import (
-    String,
-    Boolean,
-    ForeignKey,
-    Column,
-    Table,
-    Enum,
-    Integer,
-    Date,
-    DateTime,
-)
+from sqlalchemy import String, Boolean, ForeignKey, Column, Table, Enum, Integer, Date, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import Optional
 import enum
@@ -19,10 +9,15 @@ from pydantic import BaseModel
 import datetime
 
 
+
+
+
 class Course_TypeEnum(enum.Enum):
 
     compulsary = "Compulsary"
     elective = "Elective"
+    
+
 
 
 class SubjectEnum(enum.Enum):
@@ -32,6 +27,9 @@ class SubjectEnum(enum.Enum):
     maths = "Maths"
     science = "Science"
     social_studies = "Social Studies"
+    
+
+
 
 
 class Student(Model):
@@ -45,7 +43,7 @@ class Student(Model):
     created_at: Mapped[str] = mapped_column(DateTime(timezone=True))
     updated_at: Mapped[Date] = mapped_column(Date)
     has_cab_service: Mapped[bool] = mapped_column(Boolean)
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    id: Mapped[int] = mapped_column(Integer,primary_key=True)
     courses: Mapped[list["Enrollment"]] = relationship(back_populates="student")
 
 
@@ -55,7 +53,7 @@ class Enrollment(Model):
     student_id: Mapped[int] = mapped_column(ForeignKey("student.id"))
     course: Mapped["Course"] = relationship(back_populates="enrollment_set")
     course_id: Mapped[int] = mapped_column(ForeignKey("course.id"))
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    id: Mapped[int] = mapped_column(Integer,primary_key=True)
 
 
 class Course(Model):
@@ -63,7 +61,7 @@ class Course(Model):
     name: Mapped[str] = mapped_column(String(100))
     course_type: Mapped[str] = mapped_column(Enum(Course_TypeEnum))
     duration: Mapped[int] = mapped_column(Integer)
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    id: Mapped[int] = mapped_column(Integer,primary_key=True)
     enrollment_set: Mapped[list["Enrollment"]] = relationship(back_populates="course")
 
 
@@ -71,11 +69,14 @@ class Exam(Model):
     __tablename__ = "exam"
     date: Mapped[Date] = mapped_column(Date)
     subject: Mapped[str] = mapped_column(Enum(SubjectEnum))
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    id: Mapped[int] = mapped_column(Integer,primary_key=True)
+
+
+
 
 
 class StudentT(BaseModel):
-
+    
     name: str
     roll_number: str
     on_scholarship: bool
@@ -86,57 +87,130 @@ class StudentT(BaseModel):
     updated_at: datetime.date
     has_cab_service: Optional[bool]
     id: int
-    courses: Optional[list["EnrollmentT"]]
-
+    courses: list["EnrollmentT"]
     class Config:
         orm_mode = True
 
-
-class StudentInserableT(BaseModel):
-
-    name: str
-    roll_number: str
-    on_scholarship: bool
-    father_name: Optional[str]
-    address: str
-    data_of_birth: Optional[datetime.date]
-    created_at: datetime.datetime
-    updated_at: datetime.date
-    has_cab_service: Optional[bool]
-
-
 class EnrollmentT(BaseModel):
-
+    
     student: "StudentT"
     student_id: int
     course: Optional["CourseT"]
     course_id: Optional[int]
     id: int
-
     class Config:
         orm_mode = True
 
-
 class CourseT(BaseModel):
-
+    
     name: str
     course_type: str
     duration: Optional[int]
     id: int
     enrollment_set: Optional[list["EnrollmentT"]]
-
     class Config:
         orm_mode = True
 
-
 class ExamT(BaseModel):
-
+    
     date: datetime.date
     subject: str
     id: int
-
     class Config:
         orm_mode = True
+
+
+
+
+
+class StudentInsertableT(BaseModel):
+    
+    name: str
+    roll_number: str
+    on_scholarship: bool
+    father_name: Optional[str]
+    address: str
+    data_of_birth: Optional[datetime.date]
+    created_at: datetime.datetime
+    updated_at: datetime.date
+    has_cab_service: Optional[bool]
+    
+    courses: list["EnrollmentT"]
+    class Config:
+        orm_mode = True
+
+class StudentUpdatableT(BaseModel):
+    
+    name: Optional[str]
+    roll_number: Optional[str]
+    on_scholarship: Optional[bool]
+    father_name: Optional[str]
+    address: Optional[str]
+    data_of_birth: Optional[datetime.date]
+    created_at: Optional[datetime.datetime]
+    updated_at: Optional[datetime.date]
+    has_cab_service: Optional[bool]
+    id: Optional[int]
+    courses: Optional[list["EnrollmentT"]]
+    class Config:
+        orm_mode = True
+
+class EnrollmentInsertableT(BaseModel):
+    
+    student: "StudentT"
+    student_id: int
+    course: Optional["CourseT"]
+    course_id: Optional[int]
+    
+    class Config:
+        orm_mode = True
+
+class EnrollmentUpdatableT(BaseModel):
+    
+    student: Optional["StudentT"]
+    student_id: Optional[int]
+    course: Optional["CourseT"]
+    course_id: Optional[int]
+    id: Optional[int]
+    class Config:
+        orm_mode = True
+
+class CourseInsertableT(BaseModel):
+    
+    name: str
+    course_type: str
+    duration: Optional[int]
+    
+    enrollment_set: Optional[list["EnrollmentT"]]
+    class Config:
+        orm_mode = True
+
+class CourseUpdatableT(BaseModel):
+    
+    name: Optional[str]
+    course_type: Optional[str]
+    duration: Optional[int]
+    id: Optional[int]
+    enrollment_set: Optional[list["EnrollmentT"]]
+    class Config:
+        orm_mode = True
+
+class ExamInsertableT(BaseModel):
+    
+    date: datetime.date
+    subject: str
+    
+    class Config:
+        orm_mode = True
+
+class ExamUpdatableT(BaseModel):
+    
+    date: Optional[datetime.date]
+    subject: Optional[str]
+    id: Optional[int]
+    class Config:
+        orm_mode = True
+
 
 
 StudentT.update_forward_refs()
@@ -146,3 +220,5 @@ EnrollmentT.update_forward_refs()
 CourseT.update_forward_refs()
 
 ExamT.update_forward_refs()
+
+
