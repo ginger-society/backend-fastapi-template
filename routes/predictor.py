@@ -105,15 +105,23 @@ async def create_student(
         created_at=student_data.created_at,
         updated_at=student_data.updated_at,
         has_cab_service=student_data.has_cab_service,
-        courses=[],
     )
 
-    print(new_student)
     db.add(new_student)
     await db.commit()
     await db.refresh(new_student)
-
-    return StudentT.from_orm(new_student)
+    return StudentT(
+        id=new_student.id,
+        name=new_student.name,
+        roll_number=new_student.roll_number,
+        on_scholarship=new_student.on_scholarship,
+        father_name=new_student.father_name,
+        address=new_student.address,
+        created_at=new_student.created_at,
+        updated_at=new_student.updated_at,
+        has_cab_service=new_student.has_cab_service,
+        courses=[],
+    )
 
 
 @router.get(

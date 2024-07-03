@@ -45,7 +45,7 @@ class Student(Model):
     created_at: Mapped[str] = mapped_column(DateTime(timezone=True))
     updated_at: Mapped[Date] = mapped_column(Date)
     has_cab_service: Mapped[bool] = mapped_column(Boolean)
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     courses: Mapped[list["Enrollment"]] = relationship(back_populates="student")
 
 
@@ -86,7 +86,7 @@ class StudentT(BaseModel):
     updated_at: datetime.date
     has_cab_service: Optional[bool]
     id: int
-    courses: list["EnrollmentT"]
+    courses: Optional[list["EnrollmentT"]]
 
     class Config:
         orm_mode = True
