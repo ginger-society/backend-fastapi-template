@@ -2,7 +2,7 @@ A boilterplate for creating backend API using FastAPI
 
 to run
 
-uvicorn main:app --reload --host 0.0.0.0 --port 8080
+bash scripts/dev.sh
 
 to test
 

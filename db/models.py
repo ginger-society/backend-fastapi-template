@@ -150,7 +150,7 @@ class StudentUpdatableT(BaseModel):
     created_at: Optional[datetime.datetime]
     updated_at: Optional[datetime.date]
     has_cab_service: Optional[bool]
-    id: Optional[int]
+    
     courses: Optional[list["EnrollmentT"]]
     class Config:
         orm_mode = True
@@ -171,7 +171,7 @@ class EnrollmentUpdatableT(BaseModel):
     student_id: Optional[int]
     course: Optional["CourseT"]
     course_id: Optional[int]
-    id: Optional[int]
+    
     class Config:
         orm_mode = True
 
@@ -190,7 +190,7 @@ class CourseUpdatableT(BaseModel):
     name: Optional[str]
     course_type: Optional[str]
     duration: Optional[int]
-    id: Optional[int]
+    
     enrollment_set: Optional[list["EnrollmentT"]]
     class Config:
         orm_mode = True
@@ -207,18 +207,26 @@ class ExamUpdatableT(BaseModel):
     
     date: Optional[datetime.date]
     subject: Optional[str]
-    id: Optional[int]
+    
     class Config:
         orm_mode = True
 
 
 
 StudentT.update_forward_refs()
+StudentUpdatableT.update_forward_refs()
+StudentInsertableT.update_forward_refs()
 
 EnrollmentT.update_forward_refs()
+EnrollmentUpdatableT.update_forward_refs()
+EnrollmentInsertableT.update_forward_refs()
 
 CourseT.update_forward_refs()
+CourseUpdatableT.update_forward_refs()
+CourseInsertableT.update_forward_refs()
 
 ExamT.update_forward_refs()
+ExamUpdatableT.update_forward_refs()
+ExamInsertableT.update_forward_refs()
 
 
