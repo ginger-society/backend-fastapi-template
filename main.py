@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request
 import time
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from routes import router as api_router
 from settings import settings
@@ -11,7 +12,12 @@ from core.monitoring import http_requested_languages_total
 
 def get_application() -> FastAPI:
     application = FastAPI(
-        title=settings.PROJECT_NAME, debug=settings.DEBUG, version=settings.VERSION
+        title=settings.PROJECT_NAME,
+        debug=settings.DEBUG,
+        version=settings.VERSION,
+        servers=[
+            {"url": "https://api.example.com", "description": "Production server"},
+        ],
     )
     application.include_router(api_router, prefix=settings.API_PREFIX)
     pre_load = False
@@ -24,17 +30,19 @@ def get_application() -> FastAPI:
     @application.middleware("http")
     # type: ignore
     async def add_process_time_header(request: Request, call_next):
-        if str(request.url) == "{url}api/openapi.json".format(url=request.base_url):
-            if not request.get("dev_token") and settings.host != "0.0.0.0":
-                return JSONResponse(
-                    status_code=HTTPStatus.UNAUTHORIZED,
-                    content="dev_token is missing",
-                )
         start_time = time.time()
         response = await call_next(request)
         process_time = time.time() - start_time
         response.headers["X-Process-Time"] = str(process_time)
         return response
+
+    application.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],  # Allows all origins
+        allow_credentials=True,
+        allow_methods=["*"],  # Allows all methods (GET, POST, etc.)
+        allow_headers=["*"],  # Allows all headers
+    )
 
     return application
 
